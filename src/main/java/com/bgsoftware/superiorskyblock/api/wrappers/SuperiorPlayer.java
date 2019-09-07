@@ -1,5 +1,6 @@
 package com.bgsoftware.superiorskyblock.api.wrappers;
 
+import com.bgsoftware.superiorskyblock.api.enums.BorderColor;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandPermission;
 import com.bgsoftware.superiorskyblock.api.island.IslandRole;
@@ -89,6 +90,18 @@ public interface SuperiorPlayer {
 
     void toggleIslandFly();
 
+    boolean hasAdminSpyEnabled();
+
+    void toggleAdminSpy();
+
     boolean isInsideIsland();
+
+    BorderColor getBorderColor();
+
+    void setBorderColor(BorderColor borderColor);
+
+    void updateLastTimeStatus();
+
+    long getLastTimeStatus();
 
 }
