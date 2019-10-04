@@ -1,7 +1,5 @@
 package com.bgsoftware.superiorskyblock.api.island;
 
-import java.util.Arrays;
-
 public enum IslandPermission {
 
     ALL,
@@ -15,6 +13,7 @@ public enum IslandPermission {
     CHEST_ACCESS,
     CLOSE_BYPASS,
     CLOSE_ISLAND,
+    COOP_MEMBER,
     DELETE_WARP,
     DEMOTE_MEMBERS,
     DEPOSIT_MONEY,
@@ -43,14 +42,8 @@ public enum IslandPermission {
     SET_ROLE,
     SET_WARP,
     SIGN_INTERACT,
+    UNCOOP_MEMBER,
     USE,
-    WITHDRAW_MONEY;
-
-    public static String getValuesString(){
-        StringBuilder stringBuilder = new StringBuilder();
-        Arrays.stream(values()).forEach(islandPermission -> stringBuilder.append(", ").append(islandPermission.name().toLowerCase()));
-        return stringBuilder.toString().substring(2);
-    }
-
+    WITHDRAW_MONEY
 
 }
