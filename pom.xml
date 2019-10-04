@@ -6,7 +6,7 @@
 
     <groupId>com.bgsoftware</groupId>
     <artifactId>superiorskyblock-api</artifactId>
-    <version>b6</version>
+    <version>b8</version>
 
     <build>
         <plugins>
