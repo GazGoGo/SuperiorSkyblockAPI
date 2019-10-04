@@ -4,6 +4,8 @@ import com.bgsoftware.superiorskyblock.api.enums.BorderColor;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandPermission;
 import com.bgsoftware.superiorskyblock.api.island.IslandRole;
+import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
+import com.bgsoftware.superiorskyblock.api.missions.Mission;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -34,9 +36,15 @@ public interface SuperiorPlayer {
 
     Island getIsland();
 
+    @Deprecated
     IslandRole getIslandRole();
 
+    PlayerRole getPlayerRole();
+
+    @Deprecated
     void setIslandRole(IslandRole islandRole);
+
+    void setPlayerRole(PlayerRole playerRole);
 
     boolean hasWorldBorderEnabled();
 
@@ -103,5 +111,11 @@ public interface SuperiorPlayer {
     void updateLastTimeStatus();
 
     long getLastTimeStatus();
+
+    void completeMission(Mission mission);
+
+    void resetMission(Mission mission);
+
+    boolean hasCompletedMission(Mission mission);
 
 }

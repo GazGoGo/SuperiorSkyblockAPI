@@ -2,6 +2,7 @@ package com.bgsoftware.superiorskyblock.api.island;
 
 import com.bgsoftware.superiorskyblock.api.enums.Rating;
 import com.bgsoftware.superiorskyblock.api.key.Key;
+import com.bgsoftware.superiorskyblock.api.missions.Mission;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -29,9 +30,16 @@ public interface Island extends Comparable<Island> {
 
     boolean isInvited(SuperiorPlayer superiorPlayer);
 
+    @Deprecated
     void addMember(SuperiorPlayer superiorPlayer, IslandRole islandRole);
 
+    void addMember(SuperiorPlayer superiorPlayer, PlayerRole playerRole);
+
+    void addCoop(SuperiorPlayer superiorPlayer);
+
     void kickMember(SuperiorPlayer superiorPlayer);
+
+    void removeCoop(SuperiorPlayer superiorPlayer);
 
     void banMember(SuperiorPlayer superiorPlayer);
 
@@ -48,6 +56,8 @@ public interface Island extends Comparable<Island> {
     List<UUID> allPlayersInside();
 
     boolean isMember(SuperiorPlayer superiorPlayer);
+
+    boolean isCoop(SuperiorPlayer superiorPlayer);
 
     Location getCenter();
 
@@ -67,15 +77,24 @@ public interface Island extends Comparable<Island> {
 
     boolean hasPermission(SuperiorPlayer superiorPlayer, IslandPermission islandPermission);
 
+    @Deprecated
     void setPermission(IslandRole islandRole, IslandPermission islandPermission, boolean value);
+
+    void setPermission(PlayerRole playerRole, IslandPermission islandPermission, boolean value);
 
     void setPermission(SuperiorPlayer superiorPlayer, IslandPermission islandPermission, boolean value);
 
+    @Deprecated
     PermissionNode getPermisisonNode(IslandRole islandRole);
+
+    PermissionNode getPermisisonNode(PlayerRole playerRole);
 
     PermissionNode getPermisisonNode(SuperiorPlayer superiorPlayer);
 
+    @Deprecated
     IslandRole getRequiredRole(IslandPermission islandPermission);
+
+    PlayerRole getRequiredPlayerRole(IslandPermission islandPermission);
 
     void disbandIsland();
 
@@ -246,5 +265,13 @@ public interface Island extends Comparable<Island> {
     int getRatingAmount();
 
     Map<UUID, Rating> getRatings();
+
+    void completeMission(Mission mission);
+
+    void resetMission(Mission mission);
+
+    boolean hasCompletedMission(Mission mission);
+
+    Biome getBiome();
 
 }
