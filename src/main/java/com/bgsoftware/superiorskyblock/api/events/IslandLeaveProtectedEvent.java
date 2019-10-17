@@ -2,30 +2,38 @@ package com.bgsoftware.superiorskyblock.api.events;
 
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-@SuppressWarnings("unused")
-public class IslandLeaveProtectedEvent extends Event implements Cancellable {
+/**
+ * IslandLeaveProtectedEvent is called when a player is walking out from the island's protected area.
+ * The protected area is the area that players can build in.
+ */
+public class IslandLeaveProtectedEvent extends IslandLeaveEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final SuperiorPlayer superiorPlayer;
-    private final Island island;
     private boolean cancelled = false;
 
+    /**
+     * The constructor of the event.
+     * @param superiorPlayer The player who left the island's protected area.
+     * @param island The island that the player left.
+     *
+     * @deprecated See IslandLeaveProtectedEvent(SuperiorPlayer, Island, LeaveCause)
+     */
+    @Deprecated
     public IslandLeaveProtectedEvent(SuperiorPlayer superiorPlayer, Island island){
-        this.superiorPlayer = superiorPlayer;
-        this.island = island;
+        super(superiorPlayer, island, LeaveCause.INVALID);
     }
 
-    public SuperiorPlayer getPlayer() {
-        return superiorPlayer;
-    }
-
-    public Island getIsland() {
-        return island;
+    /**
+     * The constructor of the event.
+     * @param superiorPlayer The player who left the island's protected area.
+     * @param island The island that the player left.
+     * @param leaveCause The cause of leaving the island.
+     */
+    public IslandLeaveProtectedEvent(SuperiorPlayer superiorPlayer, Island island, LeaveCause leaveCause){
+        super(superiorPlayer, island, leaveCause);
     }
 
     @Override
