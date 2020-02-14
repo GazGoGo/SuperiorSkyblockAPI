@@ -1,5 +1,10 @@
 package com.bgsoftware.superiorskyblock.api;
 
+import com.bgsoftware.superiorskyblock.api.handlers.BlockValuesManager;
+import com.bgsoftware.superiorskyblock.api.handlers.GridManager;
+import com.bgsoftware.superiorskyblock.api.handlers.MissionsManager;
+import com.bgsoftware.superiorskyblock.api.handlers.PlayersManager;
+import com.bgsoftware.superiorskyblock.api.hooks.SpawnersProvider;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.schematic.Schematic;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
@@ -93,12 +98,22 @@ public final class SuperiorSkyblockAPI {
     }
 
     /**
-     * Get the islands world.
+     * Get the islands normal world.
      *
-     * @return the spawn island.
+     * @return the islands normal world.
      */
     public static World getIslandsWorld(){
-        return plugin.getGrid().getIslandsWorld();
+        return getIslandsWorld(World.Environment.NORMAL);
+    }
+
+    /**
+     * Get the islands world by world's environment.
+     * @param environment The environment.
+     *
+     * @return the islands world.
+     */
+    public static World getIslandsWorld(World.Environment environment){
+        return plugin.getGrid().getIslandsWorld(environment);
     }
 
     /**
@@ -133,13 +148,47 @@ public final class SuperiorSkyblockAPI {
     }
 
     /*
+     *  Providers Methods
+     */
+
+    public static void setSpawnersProvider(SpawnersProvider spawnersProvider){
+        plugin.getProviders().setSpawnersProvider(spawnersProvider);
+    }
+
+    /*
      *  Main Method
      */
 
     /**
+     * Get the grid of the core.
+     */
+    public static GridManager getGrid(){
+        return plugin.getGrid();
+    }
+
+    /**
+     * Get the blocks manager of the core.
+     */
+    public static BlockValuesManager getBlockValues(){
+        return plugin.getBlockValues();
+    }
+
+    /**
+     * Get the players manager of the core.
+     */
+    public static PlayersManager getPlayers(){
+        return plugin.getPlayers();
+    }
+
+    /**
+     * Get the missions manager of the core.
+     */
+    public static MissionsManager getMissions(){
+        return plugin.getMissions();
+    }
+
+    /**
      * Get the superiorskyblock object.
-     *
-     * @return superiorskyblock object
      */
     public static SuperiorSkyblock getSuperiorSkyblock(){
         return plugin;

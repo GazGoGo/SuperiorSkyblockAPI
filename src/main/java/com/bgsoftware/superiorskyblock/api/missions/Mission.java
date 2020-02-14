@@ -1,17 +1,21 @@
 package com.bgsoftware.superiorskyblock.api.missions;
 
+import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Mission {
 
     private String name = null;
     private List<String> requiredMissions = new ArrayList<>();
+    private List<String> requiredChecks = new ArrayList<>();
     private boolean onlyShowIfRequiredCompleted = false;
 
     /**
@@ -39,10 +43,26 @@ public abstract class Mission {
     }
 
     /**
+     * Add required check for completing this mission.
+     * These checks have placeholders support.
+     * @param checks The array of required missions.
+     */
+    public void addRequiredCheck(String... checks){
+        requiredChecks.addAll(Arrays.asList(checks));
+    }
+
+    /**
      * Get the required missions for completing this mission.
      */
     public List<String> getRequiredMissions(){
         return new ArrayList<>(requiredMissions);
+    }
+
+    /**
+     * Get the required checks for completing this mission.
+     */
+    public List<String> getRequiredChecks() {
+        return new ArrayList<>(requiredChecks);
     }
 
     /**
@@ -69,10 +89,47 @@ public abstract class Mission {
     public abstract void load(JavaPlugin plugin, ConfigurationSection missionSection) throws MissionLoadException;
 
     /**
+     * Get the progress of a specific player.
+     * Method should return a value between 0.0 and 1.0
+     * @param superiorPlayer The player to check.
+     */
+    public abstract double getProgress(SuperiorPlayer superiorPlayer);
+
+    /**
+     * Get the progress value of a specific player.
+     * For example: amount of broken cobblestone, amount of kills, etc.
+     * @param superiorPlayer The player to check.
+     */
+    public int getProgressValue(SuperiorPlayer superiorPlayer){
+        return 0;
+    }
+
+    /**
      * Check whether or not a player can complete the mission.
      * @param superiorPlayer The player to check.
      */
-    public abstract boolean canComplete(SuperiorPlayer superiorPlayer);
+    public boolean canComplete(SuperiorPlayer superiorPlayer){
+        if(!SuperiorSkyblockAPI.getSuperiorSkyblock().getGrid().isIslandsWorld(superiorPlayer.getWorld()))
+            return false;
+
+        return getProgress(superiorPlayer) >= 1.0;
+    }
+
+    /**
+     * Save mission's progress.
+     * @param section The mission's section in the config.
+     */
+    public void saveProgress(ConfigurationSection section){
+
+    }
+
+    /**
+     * Load mission's progress.
+     * @param section The mission's section in the config.
+     */
+    public void loadProgress(ConfigurationSection section){
+
+    }
 
     /**
      * A function that is called when a player is completing the mission.
@@ -86,4 +143,40 @@ public abstract class Mission {
      */
     public abstract void onCompleteFail(SuperiorPlayer superiorPlayer);
 
+    /**
+     * A function that is called in order to clear progress of a player.
+     * @param superiorPlayer The player to clear the data of.
+     */
+    public void clearData(SuperiorPlayer superiorPlayer){
+
+    }
+
+    /**
+     * A function that is called on every item of the menu.
+     * This is used to inject custom placeholders into items.
+     * The method is called async.
+     * @param superiorPlayer The player that opens the menu.
+     * @param itemStack The item of the mission.
+     */
+    public void formatItem(SuperiorPlayer superiorPlayer, ItemStack itemStack){
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mission mission = (Mission) o;
+        return Objects.equals(name, mission.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

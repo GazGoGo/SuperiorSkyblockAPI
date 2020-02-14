@@ -3,7 +3,6 @@ package com.bgsoftware.superiorskyblock.api.wrappers;
 import com.bgsoftware.superiorskyblock.api.enums.BorderColor;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandPermission;
-import com.bgsoftware.superiorskyblock.api.island.IslandRole;
 import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
 import com.bgsoftware.superiorskyblock.api.missions.Mission;
 import org.bukkit.Location;
@@ -13,7 +12,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public interface SuperiorPlayer {
 
@@ -44,6 +45,17 @@ public interface SuperiorPlayer {
     void updateName();
 
     /**
+     * Get the locale of the player.
+     */
+    Locale getUserLocale();
+
+    /**
+     * Set the locale of the player.
+     * @param locale The locale to set.
+     */
+    void setUserLocale(Locale locale);
+
+    /**
      * Get the world that the player is inside.
      */
     World getWorld();
@@ -54,16 +66,53 @@ public interface SuperiorPlayer {
     Location getLocation();
 
     /**
+     * Teleport the player to a location.
+     * @param location The location to teleport the player to.
+     */
+    void teleport(Location location);
+
+    /**
+     * Teleport the player to an island.
+     * @param island The island to teleport the player to.
+     */
+    void teleport(Island island);
+
+    /**
+     * Teleport the player to an island.
+     * @param island The island to teleport the player to.
+     * @param result Consumer that will be ran when task is finished.
+     */
+    void teleport(Island island, Consumer<Boolean> result);
+
+    /**
+     * Get the island owner of the player's island.
+     *
+     * @deprecated getIslandLeader
+     */
+    @Deprecated
+    UUID getTeamLeader();
+
+    /**
      * Get the island owner of the player's island.
      */
-    UUID getTeamLeader();
+    SuperiorPlayer getIslandLeader();
 
     /**
      * Set the island owner of the player's island.
      * !Can cause issues if not used properly!
      * @param teamLeader The island owner's uuid.
+     *
+     * @deprecated See setIslandLeader(SuperiorPlayer)
      */
+    @Deprecated
     void setTeamLeader(UUID teamLeader);
+
+    /**
+     * Set the island owner of the player's island.
+     * !Can cause issues if not used properly!
+     * @param superiorPlayer The island owner's player.
+     */
+    void setIslandLeader(SuperiorPlayer superiorPlayer);
 
     /**
      * Get the island of the player.
@@ -72,25 +121,8 @@ public interface SuperiorPlayer {
 
     /**
      * Get the role of the player.
-     *
-     * @deprecated See getPlayerRole()
-     */
-    @Deprecated
-    IslandRole getIslandRole();
-
-    /**
-     * Get the role of the player.
      */
     PlayerRole getPlayerRole();
-
-    /**
-     * Set the role of the player.
-     * @param islandRole The role to give the player.
-     *
-     * @deprecated see setPlayerRole(PlayerRole)
-     */
-    @Deprecated
-    void setIslandRole(IslandRole islandRole);
 
     /**
      * Set the role of the player.
@@ -191,6 +223,11 @@ public interface SuperiorPlayer {
     boolean hasPermission(String permission);
 
     /**
+     * Check whether or not the player has a permission without having op.
+     */
+    boolean hasPermissionWithoutOP(String permission);
+
+    /**
      * Check whether or not the player has a permission on his island.
      */
     boolean hasPermission(IslandPermission permission);
@@ -279,10 +316,22 @@ public interface SuperiorPlayer {
     void resetMission(Mission mission);
 
     /**
-     * Check whether the island has completed the mission before.
+     * Check whether the player has completed the mission before.
      * @param mission The mission to check.
      */
     boolean hasCompletedMission(Mission mission);
+
+    /**
+     * Check whether the player can complete a mission again.
+     * @param mission The mission to check.
+     */
+    boolean canCompleteMissionAgain(Mission mission);
+
+    /**
+     * Get the amount of times mission was completed.
+     * @param mission The mission to check.
+     */
+    int getAmountMissionCompleted(Mission mission);
 
     /**
      * Get the list of the completed missions of the player.

@@ -23,6 +23,7 @@ public enum IslandPermission {
     EXPEL_BYPASS,
     EXPEL_PLAYERS,
     FARM_TRAMPING,
+    FLY,
     INTERACT,
     INVITE_MEMBER,
     ITEM_FRAME,
@@ -45,6 +46,7 @@ public enum IslandPermission {
     SET_SETTINGS,
     SET_WARP,
     SIGN_INTERACT,
+    SPAWNER_BREAK,
     UNCOOP_MEMBER,
     USE,
     WITHDRAW_MONEY

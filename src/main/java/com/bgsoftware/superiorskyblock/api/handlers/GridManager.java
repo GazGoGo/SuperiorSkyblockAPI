@@ -3,6 +3,7 @@ package com.bgsoftware.superiorskyblock.api.handlers;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.SortingType;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -89,6 +90,13 @@ public interface GridManager {
     Island getIslandAt(Location location);
 
     /**
+     * Get an island from a chunk.
+     * @param chunk The chunk to check.
+     * @return The island at that position. May be null.
+     */
+    Island getIslandAt(Chunk chunk);
+
+    /**
      * Transfer an island's leadership to another owner.
      * @param oldOwner The old owner of the island.
      * @param newOwner The new owner of the island.
@@ -113,8 +121,24 @@ public interface GridManager {
 
     /**
      * Get the islands world.
+     *
+     * @deprecated See getIslandsWorld(Environment)
      */
+    @Deprecated
     World getIslandsWorld();
+
+    /**
+     * Get the islands world by the environment.
+     * If the environment is not the normal and that environment is disabled in config, null will be returned.
+     * @param environment The world environment.
+     */
+    World getIslandsWorld(World.Environment environment);
+
+    /**
+     * Checks if the given world is an islands world.
+     * Can be the normal world, the nether world (if enabled in config) or the end world (if enabled in config)
+     */
+    boolean isIslandsWorld(World world);
 
     /**
      * Get the next location for a new island.
@@ -181,9 +205,40 @@ public interface GridManager {
     void calcAllIslands();
 
     /**
+     * Calculate the worth of all the islands on the server.
+     * @param callback Runnable that will be ran when process is finished.
+     */
+    void calcAllIslands(Runnable callback);
+
+    /**
      * Checks whether or not the material is a spawner.
      * @param material The material to check.
+     *
+     * @deprecated See KeysManager.
      */
+    @Deprecated
     boolean isSpawner(Material material);
+
+    /**
+     * Make the island to be deleted when server stops.
+     * @param island The island to delete.
+     */
+    void addIslandToPurge(Island island);
+
+    /**
+     * Remove the island from being deleted when server stops.
+     * @param island The island to keep.
+     */
+    void removeIslandFromPurge(Island island);
+
+    /**
+     * Check if the island will be deleted when the server stops?
+     */
+    boolean isIslandPurge(Island island);
+
+    /**
+     * Get all the islands that will be deleted when the server stops.
+     */
+    List<Island> getIslandsToPurge();
 
 }

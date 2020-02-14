@@ -81,6 +81,12 @@ public interface MenusManager {
     void openIslandPermissionsMenu(SuperiorPlayer superiorPlayer, Island island, SuperiorPlayer targetPlayer);
 
     /**
+     * Open the language menu for a player.
+     * @param superiorPlayer The player to open the menu for.
+     */
+    void openPlayerLanguageMenu(SuperiorPlayer superiorPlayer);
+
+    /**
      * Open the island rate menu for a player.
      * @param superiorPlayer The player to open the menu for.
      * @param island The target island to give the rating.
@@ -95,11 +101,25 @@ public interface MenusManager {
     void openIslandRatingsMenu(SuperiorPlayer superiorPlayer, Island island);
 
     /**
+     * Open the island settings menu for a player.
+     * @param superiorPlayer The player to open the menu for.
+     * @param island The island to get the settings from.
+     */
+    void openIslandSettingsMenu(SuperiorPlayer superiorPlayer, Island island);
+
+    /**
      * Open the islands top menu for a player.
      * @param superiorPlayer The player to open the menu for.
      * @param sortingType The sorting type you want to open.
      */
     void openIslandsTopMenu(SuperiorPlayer superiorPlayer, SortingType sortingType);
+
+    /**
+     * Open the unique island visitors menu for a player.
+     * @param superiorPlayer The player to open the menu for.
+     * @param island The island to get the visitors from.
+     */
+    void openUniqueVisitorsMenu(SuperiorPlayer superiorPlayer, Island island);
 
     /**
      * Open the island upgrade menu for a player.

@@ -2,20 +2,18 @@ package com.bgsoftware.superiorskyblock.api.events;
 
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
+import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * IslandLeaveEvent is called when a player is walking out from the island's area.
  */
-public class IslandLeaveEvent extends Event implements Cancellable {
-
-    private static final HandlerList handlers = new HandlerList();
+public class IslandLeaveEvent extends IslandEvent implements Cancellable {
 
     private final SuperiorPlayer superiorPlayer;
-    private final Island island;
     private final LeaveCause leaveCause;
+    private final Location toLocation;
+
     private boolean cancelled = false;
 
     /**
@@ -25,6 +23,7 @@ public class IslandLeaveEvent extends Event implements Cancellable {
      *
      * @deprecated See IslandLeaveEvent(SuperiorPlayer, Island, LeaveCause)
      */
+    @Deprecated
     public IslandLeaveEvent(SuperiorPlayer superiorPlayer, Island island){
         this(superiorPlayer, island, LeaveCause.INVALID);
     }
@@ -34,11 +33,26 @@ public class IslandLeaveEvent extends Event implements Cancellable {
      * @param superiorPlayer The player who left the island's area.
      * @param island The island that the player left.
      * @param leaveCause The cause of leaving the island.
+     *
+     * @deprecated See IslandLeaveEvent(SuperiorPlayer, Island, LeaveCause, Location)
      */
+    @Deprecated
     public IslandLeaveEvent(SuperiorPlayer superiorPlayer, Island island, LeaveCause leaveCause){
+        this(superiorPlayer, island, leaveCause, superiorPlayer.getLocation());
+    }
+
+    /**
+     * The constructor of the event.
+     * @param superiorPlayer The player who left the island's area.
+     * @param island The island that the player left.
+     * @param leaveCause The cause of leaving the island.
+     * @param toLocation The location the player will be at after leaving.
+     */
+    public IslandLeaveEvent(SuperiorPlayer superiorPlayer, Island island, LeaveCause leaveCause, Location toLocation){
+        super(island);
         this.superiorPlayer = superiorPlayer;
-        this.island = island;
         this.leaveCause = leaveCause;
+        this.toLocation = toLocation;
     }
 
     /**
@@ -49,17 +63,17 @@ public class IslandLeaveEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the island that the player left .
-     */
-    public Island getIsland() {
-        return island;
-    }
-
-    /**
      * Get the cause of leaving the island.
      */
     public LeaveCause getCause() {
         return leaveCause;
+    }
+
+    /**
+     * Get the location the player will be after he's leaving.
+     */
+    public Location getTo() {
+        return toLocation;
     }
 
     @Override
@@ -70,15 +84,6 @@ public class IslandLeaveEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     /**
