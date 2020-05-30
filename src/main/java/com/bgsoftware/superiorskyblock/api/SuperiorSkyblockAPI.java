@@ -1,5 +1,6 @@
 package com.bgsoftware.superiorskyblock.api;
 
+import com.bgsoftware.superiorskyblock.api.commands.SuperiorCommand;
 import com.bgsoftware.superiorskyblock.api.handlers.BlockValuesManager;
 import com.bgsoftware.superiorskyblock.api.handlers.GridManager;
 import com.bgsoftware.superiorskyblock.api.handlers.MissionsManager;
@@ -70,6 +71,33 @@ public final class SuperiorSkyblockAPI {
      */
     public static void createIsland(SuperiorPlayer superiorPlayer, String schemName, BigDecimal bonus, Biome biome, String islandName){
         plugin.getGrid().createIsland(superiorPlayer, schemName, bonus, biome, islandName);
+    }
+
+    /**
+     * Create a new island.
+     * @param superiorPlayer The new owner for the island.
+     * @param schemName The schematic that should be used.
+     * @param bonus A starting worth for the island.
+     * @param biome A starting biome for the island.
+     * @param islandName The name of the new island.
+     * @param offset Should the island have an offset for it's values? If disabled, the bonus will be given.
+     */
+    public static void createIsland(SuperiorPlayer superiorPlayer, String schemName, BigDecimal bonus, Biome biome, String islandName, boolean offset){
+        plugin.getGrid().createIsland(superiorPlayer, schemName, bonus, biome, islandName, offset);
+    }
+
+    /**
+     * Create a new island.
+     * @param superiorPlayer The new owner for the island.
+     * @param schemName The schematic that should be used.
+     * @param bonusWorth A starting worth for the island.
+     * @param bonusLevel A starting level for the island.
+     * @param biome A starting biome for the island.
+     * @param islandName The name of the new island.
+     * @param offset Should the island have an offset for it's values? If disabled, the bonus will be given.
+     */
+    public static void createIsland(SuperiorPlayer superiorPlayer, String schemName, BigDecimal bonusWorth, BigDecimal bonusLevel, Biome biome, String islandName, boolean offset){
+        plugin.getGrid().createIsland(superiorPlayer, schemName, bonusWorth, bonusLevel, biome, islandName, offset);
     }
 
     /**
@@ -193,6 +221,14 @@ public final class SuperiorSkyblockAPI {
      */
     public static UpgradesManager getUpgrades(){
         return plugin.getUpgrades();
+    }
+
+    /**
+     * Register a sub-command.
+     * @param superiorCommand The sub command to register.
+     */
+    public static void registerCommand(SuperiorCommand superiorCommand){
+        plugin.getCommands().registerCommand(superiorCommand);
     }
 
     /**

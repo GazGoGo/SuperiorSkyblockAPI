@@ -27,6 +27,35 @@ public interface GridManager {
     void createIsland(SuperiorPlayer superiorPlayer, String schemName, BigDecimal bonus, Biome biome, String islandName);
 
     /**
+     * Create a new island.
+     * @param superiorPlayer The new owner for the island.
+     * @param schemName The schematic that should be used.
+     * @param bonus A starting worth for the island.
+     * @param biome A starting biome for the island.
+     * @param islandName The name of the new island.
+     * @param offset Should the island have an offset for it's values? If disabled, the bonus will be given.
+     */
+    void createIsland(SuperiorPlayer superiorPlayer, String schemName, BigDecimal bonus, Biome biome, String islandName, boolean offset);
+
+    /**
+     * Create a new island.
+     * @param superiorPlayer The new owner for the island.
+     * @param schemName The schematic that should be used.
+     * @param bonusWorth A starting worth for the island.
+     * @param bonusLevel A starting level for the island.
+     * @param biome A starting biome for the island.
+     * @param islandName The name of the new island.
+     * @param offset Should the island have an offset for it's values? If disabled, the bonus will be given.
+     */
+    void createIsland(SuperiorPlayer superiorPlayer, String schemName, BigDecimal bonusWorth, BigDecimal bonusLevel, Biome biome, String islandName, boolean offset);
+
+    /**
+     * Checks if a player has an active request for creating an island.
+     * @param superiorPlayer The player to check.
+     */
+    boolean hasActiveCreateRequest(SuperiorPlayer superiorPlayer);
+
+    /**
      * Delete an island.
      * @param island The island to delete.
      */
@@ -240,5 +269,11 @@ public interface GridManager {
      * Get all the islands that will be deleted when the server stops.
      */
     List<Island> getIslandsToPurge();
+
+    /**
+     * Add a new sorting type to the registry of islands.
+     * @param sortingType The new sorting type to register.
+     */
+    void registerSortingType(SortingType sortingType);
 
 }
