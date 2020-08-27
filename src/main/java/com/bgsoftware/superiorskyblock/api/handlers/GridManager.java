@@ -105,6 +105,13 @@ public interface GridManager {
     Island getIsland(UUID uuid);
 
     /**
+     * Get an island by it's uuid.
+     * @param uuid The uuid of the island.
+     * @return The island with that UUID. May be null.
+     */
+    Island getIslandByUUID(UUID uuid);
+
+    /**
      * Get an island by it's name.
      * @param islandName The name to check.
      * @return The island with that name. May be null.
@@ -168,6 +175,18 @@ public interface GridManager {
      * Can be the normal world, the nether world (if enabled in config) or the end world (if enabled in config)
      */
     boolean isIslandsWorld(World world);
+
+    /**
+     * Register a world as a islands world.
+     * This will add all protections to that world, however - no islands will by physically there.
+     * @param world The world to register as an islands world.
+     */
+    void registerIslandWorld(World world);
+
+    /**
+     * Get all registered worlds.
+     */
+    List<World> getRegisteredWorlds();
 
     /**
      * Get the next location for a new island.
@@ -275,5 +294,17 @@ public interface GridManager {
      * @param sortingType The new sorting type to register.
      */
     void registerSortingType(SortingType sortingType);
+
+    /**
+     * Get the total worth of all the islands.
+     * This value is updated every minute, so it might not be 100% accurate.
+     */
+    BigDecimal getTotalWorth();
+
+    /**
+     * Get the total level of all the islands.
+     * This value is updated every minute, so it might not be 100% accurate.
+     */
+    BigDecimal getTotalLevel();
 
 }

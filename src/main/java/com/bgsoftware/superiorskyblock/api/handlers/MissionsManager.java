@@ -4,6 +4,7 @@ import com.bgsoftware.superiorskyblock.api.missions.Mission;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface MissionsManager {
 
@@ -12,22 +13,22 @@ public interface MissionsManager {
      * @param name The name to check.
      * @return The mission with that name. May be null.
      */
-    Mission getMission(String name);
+    Mission<?> getMission(String name);
 
     /**
      * Get a list of all the missions.
      */
-    List<Mission> getAllMissions();
+    List<Mission<?>> getAllMissions();
 
     /**
      * Get a list of all missions that are player missions.
      */
-    List<Mission> getPlayerMissions();
+    List<Mission<?>> getPlayerMissions();
 
     /**
      * Get a list of all missions that are island missions.
      */
-    List<Mission> getIslandMissions();
+    List<Mission<?>> getIslandMissions();
 
     /**
      * Check whether or not the player has already completed the mission.
@@ -35,7 +36,7 @@ public interface MissionsManager {
      * @param mission The mission to check.
      * @return True if player has completed, otherwise false.
      */
-    boolean hasCompleted(SuperiorPlayer superiorPlayer, Mission mission);
+    boolean hasCompleted(SuperiorPlayer superiorPlayer, Mission<?> mission);
 
     /**
      * Check whether or not a player can complete a mission.
@@ -43,7 +44,7 @@ public interface MissionsManager {
      * @param mission The mission to check.
      * @return True if player can complete, otherwise false.
      */
-    boolean canComplete(SuperiorPlayer superiorPlayer, Mission mission);
+    boolean canComplete(SuperiorPlayer superiorPlayer, Mission<?> mission);
 
     /**
      * Check whether or not a player can complete a mission, without considering progress.
@@ -51,7 +52,7 @@ public interface MissionsManager {
      * @param mission The mission to check.
      * @return True if player can complete, otherwise false.
      */
-    boolean canCompleteNoProgress(SuperiorPlayer superiorPlayer, Mission mission);
+    boolean canCompleteNoProgress(SuperiorPlayer superiorPlayer, Mission<?> mission);
 
     /**
      * Check whether or not the player can complete the mission again.
@@ -59,7 +60,7 @@ public interface MissionsManager {
      * @param mission The mission to check.
      * @return True if player can complete, otherwise false.
      */
-    boolean canCompleteAgain(SuperiorPlayer superiorPlayer, Mission mission);
+    boolean canCompleteAgain(SuperiorPlayer superiorPlayer, Mission<?> mission);
 
     /**
      * Check whether or not a player has all the required missions to complete a mission.
@@ -67,7 +68,7 @@ public interface MissionsManager {
      * @param mission The mission to check.
      * @return True if player has all required missions, otherwise false.
      */
-    boolean hasAllRequiredMissions(SuperiorPlayer superiorPlayer, Mission mission);
+    boolean hasAllRequiredMissions(SuperiorPlayer superiorPlayer, Mission<?> mission);
 
     /**
      * Check whether or not a player can pass all the checks to complete a mission.
@@ -75,7 +76,7 @@ public interface MissionsManager {
      * @param mission The mission to check.
      * @return True if player can pass all checks, otherwise false.
      */
-    boolean canPassAllChecks(SuperiorPlayer superiorPlayer, Mission mission);
+    boolean canPassAllChecks(SuperiorPlayer superiorPlayer, Mission<?> mission);
 
     /**
      * Reward a player for completing a specific mission.
@@ -83,7 +84,7 @@ public interface MissionsManager {
      * @param superiorPlayer The player to reward.
      * @param checkAutoReward Whether or not the auto reward flag should be checked.
      */
-    void rewardMission(Mission mission, SuperiorPlayer superiorPlayer, boolean checkAutoReward);
+    void rewardMission(Mission<?> mission, SuperiorPlayer superiorPlayer, boolean checkAutoReward);
 
     /**
      * Reward a player for completing a specific mission.
@@ -92,7 +93,17 @@ public interface MissionsManager {
      * @param checkAutoReward Whether or not the auto reward flag should be checked.
      * @param forceReward Should the plugin force the reward to the player (no checks will be ran)
      */
-    void rewardMission(Mission mission, SuperiorPlayer superiorPlayer, boolean checkAutoReward, boolean forceReward);
+    void rewardMission(Mission<?> mission, SuperiorPlayer superiorPlayer, boolean checkAutoReward, boolean forceReward);
+
+    /**
+     * Reward a player for completing a specific mission.
+     * @param mission The mission that was completed.
+     * @param superiorPlayer The player to reward.
+     * @param checkAutoReward Whether or not the auto reward flag should be checked.
+     * @param forceReward Should the plugin force the reward to the player (no checks will be ran)
+     * @param result The result of the reward.
+     */
+    void rewardMission(Mission<?> mission, SuperiorPlayer superiorPlayer, boolean checkAutoReward, boolean forceReward, Consumer<Boolean> result);
 
     /**
      * Save all data related to missions.
@@ -110,6 +121,6 @@ public interface MissionsManager {
      * Load all data related to missions of specific missions.
      * All the data is loaded from a yaml file.
      */
-    void loadMissionsData(List<Mission> missionsList);
+    void loadMissionsData(List<Mission<?>> missionsList);
 
 }

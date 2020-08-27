@@ -13,6 +13,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +34,21 @@ public interface Island extends Comparable<Island> {
      */
     SuperiorPlayer getOwner();
 
+    /**
+     * Get the unique-id of the island.
+     */
+    UUID getUniqueId();
+
+    /**
+     * Get the creation time of the island.
+     */
+    long getCreationTime();
+
+    /**
+     * Get the creation time of the island, in a formatted string.
+     */
+    String getCreationTimeDate();
+
     /*
      *  Player related methods
      */
@@ -49,9 +65,15 @@ public interface Island extends Comparable<Island> {
     List<SuperiorPlayer> getBannedPlayers();
 
     /**
-     * Get the list of all visitors that are on the island.
+     * Get the list of all visitors that are on the island, including vanished ones.
      */
     List<SuperiorPlayer> getIslandVisitors();
+
+    /**
+     * Get the list of all visitors that are on the island.
+     * @param vanishPlayers Should vanish players be included?
+     */
+    List<SuperiorPlayer> getIslandVisitors(boolean vanishPlayers);
 
     /**
      * Get the list of all the players that are on the island.
@@ -144,6 +166,18 @@ public interface Island extends Comparable<Island> {
      * Get the list of all co-op players.
      */
     List<SuperiorPlayer> getCoopPlayers();
+
+    /**
+     * Get the coop players limit of the island.
+     */
+    int getCoopLimit();
+
+    /**
+     * Set the coop players limit of the island.
+     * @param coopLimit The coop players limit to set.
+     */
+    void setCoopLimit(int coopLimit);
+
 
     /**
      * Update status of a player if he's inside the island or not.
@@ -312,6 +346,34 @@ public interface Island extends Comparable<Island> {
      * @param onChunkLoad A consumer that will be ran when the chunk is loaded. Can be null.
      */
     List<CompletableFuture<Chunk>> getAllChunksAsync(World.Environment environment, boolean onlyProtected, boolean noEmptyChunks, Consumer<Chunk> onChunkLoad);
+
+    /**
+     * Reset all the chunks of the island (will make all chunks empty).
+     * @param environment The environment to reset chunks in.
+     * @param onlyProtected Whether or not only chunks inside the protected area should be reset.
+     */
+    void resetChunks(World.Environment environment, boolean onlyProtected);
+
+    /**
+     * Reset all the chunks of the island (will make all chunks empty).
+     * @param environment The environment to reset chunks in.
+     * @param onlyProtected Whether or not only chunks inside the protected area should be reset.
+     * @param onFinish Callback runnable.
+     */
+    void resetChunks(World.Environment environment, boolean onlyProtected, Runnable onFinish);
+
+    /**
+     * Reset all the chunks of the island from all the worlds (will make all chunks empty).
+     * @param onlyProtected Whether or not only chunks inside the protected area should be reset.
+     */
+    void resetChunks(boolean onlyProtected);
+
+    /**
+     * Reset all the chunks of the island from all the worlds (will make all chunks empty).
+     * @param onlyProtected Whether or not only chunks inside the protected area should be reset.
+     * @param onFinish Callback runnable.
+     */
+    void resetChunks(boolean onlyProtected, Runnable onFinish);
 
     /**
      * Check if the location is inside the island's area.
@@ -645,10 +707,22 @@ public interface Island extends Comparable<Island> {
     void depositMoney(double amount);
 
     /**
+     * Deposit money into the bank.
+     * @param amount The amount to deposit.
+     */
+    void depositMoney(BigDecimal amount);
+
+    /**
      * Withdraw money from the bank.
      * @param amount The amount to withdraw.
      */
     void withdrawMoney(double amount);
+
+    /**
+     * Withdraw money from the bank.
+     * @param amount The amount to withdraw.
+     */
+    void withdrawMoney(BigDecimal amount);
 
     /*
      *  Worth related methods
@@ -848,6 +922,12 @@ public interface Island extends Comparable<Island> {
     void setUpgradeLevel(Upgrade upgrade, int level);
 
     /**
+     * Sync all the upgrade values again.
+     * This will remove custom values that were set using the set commands.
+     */
+    void syncUpgrades();
+
+    /**
      * Get the crop-growth multiplier for the island.
      */
     double getCropGrowthMultiplier();
@@ -900,11 +980,22 @@ public interface Island extends Comparable<Island> {
     Map<Key, Integer> getBlocksLimits();
 
     /**
+     * Clear all the block limits of the island.
+     */
+    void clearBlockLimits();
+
+    /**
      * Set the block limit of a block.
      * @param key The block's key to set the limit to.
      * @param limit The limit to set.
      */
     void setBlockLimit(Key key, int limit);
+
+    /**
+     * Remove the limit of a block.
+     * @param key The block's key to remove it's limit.
+     */
+    void removeBlockLimit(Key key);
 
     /**
      * A method to check if a specific block has reached the limit.
@@ -931,6 +1022,11 @@ public interface Island extends Comparable<Island> {
      * Get all the entities limits for the island.
      */
     Map<EntityType, Integer> getEntitiesLimits();
+
+    /**
+     * Clear all the entities limits from the island.
+     */
+    void clearEntitiesLimits();
 
     /**
      * Set the entity limit of an entity.
@@ -973,6 +1069,48 @@ public interface Island extends Comparable<Island> {
      * @param warpsLimit The limit to set.
      */
     void setWarpsLimit(int warpsLimit);
+
+    /**
+     * Add a potion effect to the island.
+     * @param type The potion effect to add.
+     * @param level The level of the potion effect.
+     *       If the level is 0 or below, then the effect will be removed.
+     */
+    void setPotionEffect(PotionEffectType type, int level);
+
+    /**
+     * Get the level of an island effect.
+     * @param type The potion to check.
+     * @return The level of the potion. If 0, it means that this is not an active effect on the island.
+     */
+    int getPotionEffectLevel(PotionEffectType type);
+
+    /**
+     * Get a list of all active island effects with their levels.
+     */
+    Map<PotionEffectType, Integer> getPotionEffects();
+
+    /**
+     * Give all the island effects to a player.
+     * @param superiorPlayer The player to give the effect to.
+     */
+    void applyEffects(SuperiorPlayer superiorPlayer);
+
+    /**
+     * Remove all the island effects from a player.
+     * @param superiorPlayer The player to remove the effects to.
+     */
+    void removeEffects(SuperiorPlayer superiorPlayer);
+
+    /**
+     * Remove all the island effects from the players inside the island.
+     */
+    void removeEffects();
+
+    /**
+     * Remove all the effects from the island.
+     */
+    void clearEffects();
 
     /*
      *  Warps related methods
@@ -1068,36 +1206,36 @@ public interface Island extends Comparable<Island> {
      * Complete a mission.
      * @param mission The mission to complete.
      */
-    void completeMission(Mission mission);
+    void completeMission(Mission<?> mission);
 
     /**
      * Reset a mission.
      * @param mission The mission to reset.
      */
-    void resetMission(Mission mission);
+    void resetMission(Mission<?> mission);
 
     /**
      * Check whether the island has completed the mission before.
      * @param mission The mission to check.
      */
-    boolean hasCompletedMission(Mission mission);
+    boolean hasCompletedMission(Mission<?> mission);
 
     /**
      * Check whether the island can complete a mission again.
      * @param mission The mission to check.
      */
-    boolean canCompleteMissionAgain(Mission mission);
+    boolean canCompleteMissionAgain(Mission<?> mission);
 
     /**
      * Get the amount of times mission was completed.
      * @param mission The mission to check.
      */
-    int getAmountMissionCompleted(Mission mission);
+    int getAmountMissionCompleted(Mission<?> mission);
 
     /**
      * Get the list of the completed missions of the player.
      */
-    List<Mission> getCompletedMissions();
+    List<Mission<?>> getCompletedMissions();
 
     /*
      *  Settings related methods
@@ -1224,5 +1362,33 @@ public interface Island extends Comparable<Island> {
      * Get the schematic that was used to create the island.
      */
     String getSchematicName();
+
+    /*
+     *  Island top methods
+     */
+
+    int getPosition(SortingType sortingType);
+
+    /*
+     *  Vault related methods
+     */
+
+    /**
+     * Get the island chest.
+     */
+    IslandChest[] getChest();
+
+    /**
+     * Get the amount of pages the island chest has.
+     */
+    int getChestSize();
+
+    /**
+     * Set the amount of rows for the chest in a specific index.
+     * @param index The index of the page (0 or above)
+     * @param rows The amount of rows for that page.
+     */
+    void setChestRows(int index, int rows);
+
 
 }

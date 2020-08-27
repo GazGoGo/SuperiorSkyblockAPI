@@ -1,7 +1,9 @@
 package com.bgsoftware.superiorskyblock.api.upgrades;
 
 import com.bgsoftware.superiorskyblock.api.key.Key;
+import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import org.bukkit.entity.EntityType;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,14 @@ public interface UpgradeLevel {
      * Get the permission required to upgrade to this level.
      */
     String getPermission();
+
+    /**
+     * Check all the custom requirements of the upgrade.
+     * @param superiorPlayer The player to check the requirements on.
+     * @return The error message for the failed requirements.
+     *         If all the requirements were passed, an empty string will be returned.
+     */
+    String checkRequirements(SuperiorPlayer superiorPlayer);
 
     /**
      * Get the crop growth multiplier of this level.
@@ -82,6 +92,11 @@ public interface UpgradeLevel {
     int getWarpsLimit();
 
     /**
+     * Get the coop players limit of this level.
+     */
+    int getCoopLimit();
+
+    /**
      * Get the border size of this level.
      */
     int getBorderSize();
@@ -96,5 +111,16 @@ public interface UpgradeLevel {
      * Get all the generator rates for this level.
      */
     Map<String, Integer> getGeneratorAmounts();
+
+    /**
+     * Get the potion effect for this level.
+     * @param potionEffectType The potion effect to check.
+     */
+    int getPotionEffect(PotionEffectType potionEffectType);
+
+    /**
+     * Get all the potion effects for this level.
+     */
+    Map<PotionEffectType, Integer> getPotionEffects();
 
 }

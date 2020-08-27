@@ -73,6 +73,13 @@ public interface SuperiorPlayer {
     void teleport(Location location);
 
     /**
+     * Teleport the player to a location.
+     * @param location The location to teleport the player to.
+     * @param teleportResult The result of the teleportation process. May be null.
+     */
+    void teleport(Location location, Consumer<Boolean> teleportResult);
+
+    /**
      * Teleport the player to an island.
      * @param island The island to teleport the player to.
      */
@@ -242,6 +249,11 @@ public interface SuperiorPlayer {
     boolean hasPermission(IslandPrivilege permission);
 
     /**
+     * Check whether or not this player is in a gamemode with fly mode enabled.
+     */
+    boolean hasFlyGamemode();
+
+    /**
      * Get the amount of left disbands.
      */
     int getDisbands();
@@ -316,35 +328,35 @@ public interface SuperiorPlayer {
      * Complete a mission.
      * @param mission The mission to complete.
      */
-    void completeMission(Mission mission);
+    void completeMission(Mission<?> mission);
 
     /**
      * Reset a mission.
      * @param mission The mission to reset.
      */
-    void resetMission(Mission mission);
+    void resetMission(Mission<?> mission);
 
     /**
      * Check whether the player has completed the mission before.
      * @param mission The mission to check.
      */
-    boolean hasCompletedMission(Mission mission);
+    boolean hasCompletedMission(Mission<?> mission);
 
     /**
      * Check whether the player can complete a mission again.
      * @param mission The mission to check.
      */
-    boolean canCompleteMissionAgain(Mission mission);
+    boolean canCompleteMissionAgain(Mission<?> mission);
 
     /**
      * Get the amount of times mission was completed.
      * @param mission The mission to check.
      */
-    int getAmountMissionCompleted(Mission mission);
+    int getAmountMissionCompleted(Mission<?> mission);
 
     /**
      * Get the list of the completed missions of the player.
      */
-    List<Mission> getCompletedMissions();
+    List<Mission<?>> getCompletedMissions();
 
 }
