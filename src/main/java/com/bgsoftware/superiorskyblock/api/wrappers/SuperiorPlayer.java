@@ -1,8 +1,8 @@
 package com.bgsoftware.superiorskyblock.api.wrappers;
 
+import com.bgsoftware.superiorskyblock.api.data.PlayerDataHandler;
 import com.bgsoftware.superiorskyblock.api.enums.BorderColor;
 import com.bgsoftware.superiorskyblock.api.island.Island;
-import com.bgsoftware.superiorskyblock.api.island.IslandPermission;
 import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
 import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
 import com.bgsoftware.superiorskyblock.api.missions.Mission;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -237,14 +238,6 @@ public interface SuperiorPlayer {
 
     /**
      * Check whether or not the player has a permission on his island.
-     *
-     * @deprecated See hasPermission(IslandPrivilege)
-     */
-    @Deprecated
-    boolean hasPermission(IslandPermission permission);
-
-    /**
-     * Check whether or not the player has a permission on his island.
      */
     boolean hasPermission(IslandPrivilege permission);
 
@@ -358,5 +351,20 @@ public interface SuperiorPlayer {
      * Get the list of the completed missions of the player.
      */
     List<Mission<?>> getCompletedMissions();
+
+    /**
+     * Get all the completed missions with the amount of times they were completed.
+     */
+    Map<Mission<?>, Integer> getCompletedMissionsWithAmounts();
+
+    /**
+     * Merge another player into this object.
+     */
+    void merge(SuperiorPlayer other);
+
+    /**
+     * Get the data handler of the object.
+     */
+    PlayerDataHandler getDataHandler();
 
 }
